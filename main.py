@@ -5,19 +5,46 @@ from openpyxl.styles import PatternFill
 days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 filename = 'work-sample.xlsx'
+# filename = 'NEW-work-sample.xlsx'
 workbook = op.load_workbook(filename)
 sheet1 = workbook.active
 
+def print_sheet(maxr, maxc):
+  for i in range(1, maxr+1):
+    for j in range(1, maxc+1):
+      print(i, j, sheet1.cell(row=i, column=j).value)
 def color_row(r):
-  for i in range(1, sheet1.max_column):
+  for i in range(1, sheet1.max_column+1):
     sheet1.cell(row=r, column=i).fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
+def insert_hours(start, end, date):
+  i = 1
+  while sheet1.cell(row=i, column=2).value != date:
+    i += 1
+  j = 1
+  while sheet1.cell(row=i, column=j).value is not None:
+    j += 1
+  sheet1.cell(row=i, column=j).value = start
+  sheet1.cell(row=i, column=j+1).value = end
 def sum_hours(r):
   total = 0
   for i in range(1, 8):
     total += sheet1.cell(row=r, column=7).value
-  sheet1.cell(row=r+8, column=7).value = total
+  sheet1.cell(row=r, column=8).value = total
 def calc_hours(r):
-  return
+  array = []
+  for i in range(3, sheet1.max_column, 2):
+    start = sheet1.cell(row=r, column=i).value
+    end = sheet1.cell(row=r, column=i+1).value
+    if start is None or end is None:
+      array.append(0)
+    else:
+      converted_start = datetime.datetime.combine(datetime.date.today(), start)
+      converted_end = datetime.datetime.combine(datetime.date.today(), end)
+      diff = converted_start - converted_end
+      shift_hours = abs(diff.total_seconds() / 3600)
+      array.append(shift_hours)
+  daily_hours = sum(array)
+  sheet1.cell(row=r, column=sheet1.max_column).value = daily_hours
 def shifts(row, num):
   col = 0
   for i in range(num):
@@ -45,10 +72,6 @@ def init(r, c, start=None):
     sheet1.cell(row=r+1, column=2).value = start
   dates(r+1, 2)
   color_row(r+8)
-def print_sheet(maxr, maxc):
-  for i in range(1, maxr+1):
-    for j in range(1, maxc+1):
-      print(i, j, sheet1.cell(row=i, column=j).value)
 def main():
   i = 1
   day_date = datetime.date.today()
@@ -61,9 +84,16 @@ def main():
 
 if sheet1.cell(row=1, column=1).value is None:
   init(1, 1)
-# else:
+else:
   main()
+start = datetime.time(hour=5, minute=30)
+end = datetime.time(hour=9, minute=45)
+now = datetime.date.today()
+insert_hours(start, end, now)
+calc_hours(7)
 
 print_sheet(sheet1.max_row, sheet1.max_column)
 
+workbook.save('NEW-' + filename)
+# workbook.save(filename)
 workbook.close()
