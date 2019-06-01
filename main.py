@@ -4,8 +4,8 @@ from openpyxl.styles import PatternFill
 
 days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-filename = 'work-sample.xlsx'
-# filename = 'NEW-work-sample.xlsx'
+filename = 'sample.xlsx'
+# filename = 'NEW-sample.xlsx'
 workbook = op.load_workbook(filename)
 sheet1 = workbook.active
 
@@ -18,7 +18,11 @@ def color_row(r):
     sheet1.cell(row=r, column=i).fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
 def insert_hours(start, end, date):
   i = 1
-  while sheet1.cell(row=i, column=2).value != date:
+  # while i < 10:
+  #   print(sheet1.cell(row=i, column=2).value)
+  #   i += 1
+  while sheet1.cell(row=i, column=2).value is not None and sheet1.cell(row=i, column=2).value != date:
+    print(sheet1.cell(row=i, column=2).value, date)
     i += 1
   j = 1
   while sheet1.cell(row=i, column=j).value is not None:
@@ -28,7 +32,7 @@ def insert_hours(start, end, date):
 def sum_hours(r):
   total = 0
   for i in range(1, 8):
-    total += sheet1.cell(row=r, column=7).value
+    total += sheet1.cell(row=r+i, column=7).value
   sheet1.cell(row=r, column=8).value = total
 def calc_hours(r):
   array = []
@@ -84,17 +88,16 @@ def main():
 
 if sheet1.cell(row=1, column=1).value is None:
   init(1, 1)
+  print('inited')
 else:
   main()
-# start = datetime.time(hour=5, minute=30)
-# end = datetime.time(hour=9, minute=45)
-# now = datetime.date.today()
-# insert_hours(start, end, now)
-# start = datetime.time(hour=5, minute=30)
-# end = datetime.time(hour=9, minute=45)
-# now = datetime.date.today()
-# insert_hours(start, end, now)
-# calc_hours(7)
+  print('mained')
+start = datetime.time(hour=5, minute=30)
+end = datetime.time(hour=9, minute=45)
+now = datetime.date.today()
+insert_hours(start, end, now)
+
+calc_hours(7)
 
 print_sheet(sheet1.max_row, sheet1.max_column)
 
