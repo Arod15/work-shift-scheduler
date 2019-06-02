@@ -4,7 +4,7 @@ from openpyxl.styles import PatternFill
 
 days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-filename = 'sample.xlsx'
+filename = 'init.xlsx'
 # filename = 'NEW-sample.xlsx'
 workbook = op.load_workbook(filename)
 sheet1 = workbook.active
@@ -18,17 +18,18 @@ def color_row(r):
     sheet1.cell(row=r, column=i).fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
 def insert_hours(start, end, date):
   i = 1
-  # while i < 10:
-  #   print(sheet1.cell(row=i, column=2).value)
-  #   i += 1
-  while sheet1.cell(row=i, column=2).value is not None and sheet1.cell(row=i, column=2).value != date:
-    print(sheet1.cell(row=i, column=2).value, date)
+  j = 2
+  while sheet1.cell(row=i, column=2).value != date:
+    # print(sheet1.cell(row=i, column=2).value, date)
+    print(i, j, sheet1.cell(row=i, column=j).value, date)
     i += 1
-  j = 1
   while sheet1.cell(row=i, column=j).value is not None:
+    print(i, j, sheet1.cell(row=i, column=j).value)
     j += 1
   sheet1.cell(row=i, column=j).value = start
+  print(f"inserted {start} at ({i}, {j})")
   sheet1.cell(row=i, column=j+1).value = end
+  print(f"inserted {end} at ({i}, {j})")
 def sum_hours(r):
   total = 0
   for i in range(1, 8):
@@ -71,7 +72,8 @@ def init(r, c, start=None):
   shifts(r, 2)
   week(r+1)
   if start is None:
-    sheet1.cell(row=r+1, column=2).value = datetime.date(datetime.date.today().year, 5, 26)
+    sheet1.cell(row=r+1, column=2).value = datetime.date(2019, 5, 26)
+    print(sheet1.cell(row=r+1, column=2).value)
   else:
     sheet1.cell(row=r+1, column=2).value = start
   dates(r+1, 2)
@@ -84,7 +86,10 @@ def main():
     i += 1
   i += 1
   start_date = day_date + datetime.timedelta(days=1)
-  init(i, 1, start=start_date)
+  print('start_date: ', start_date)
+  new_day_date = datetime.date(start_date.year, start_date.month, start_date.day)
+  print('new_day_date: ', new_day_date)
+  init(i, 1, start=new_day_date)
 
 if sheet1.cell(row=1, column=1).value is None:
   init(1, 1)
@@ -95,12 +100,20 @@ else:
 start = datetime.time(hour=5, minute=30)
 end = datetime.time(hour=9, minute=45)
 now = datetime.date.today()
+print('now: ', now)
+insert_hours(start, end, now)
+
+start = datetime.time(hour=5, minute=30)
+end = datetime.time(hour=9, minute=45)
+now = datetime.date.today() + datetime.timedelta(days=2)
+print('now: ', now)
 insert_hours(start, end, now)
 
 calc_hours(7)
+calc_hours(11)
 
 print_sheet(sheet1.max_row, sheet1.max_column)
 
-# workbook.save('new-' + filename)
-workbook.save(filename)
+workbook.save('new-' + filename)
+# workbook.save(filename)
 workbook.close()
