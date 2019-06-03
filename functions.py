@@ -9,10 +9,13 @@ filename = 'init.xlsx'
 workbook = op.load_workbook(filename)
 sheet1 = workbook.active
 
-def print_sheet(maxr, maxc):
-  for i in range(1, maxr+1):
-    for j in range(1, maxc+1):
-      print(i, j, sheet1.cell(row=i, column=j).value)
+def print_sheet():
+    maxr = sheet1.max_row
+    maxc = sheet1.max_column
+    for i in range(1, maxr+1):
+        for j in range(1, maxc+1):
+            print(i, j, sheet1.cell(row=i, column=j).value)
+
 def color_row(r):
   for i in range(1, sheet1.max_column+1):
     sheet1.cell(row=r, column=i).fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
@@ -112,7 +115,7 @@ insert_hours(start, end, now)
 calc_hours(7)
 calc_hours(11)
 
-print_sheet(sheet1.max_row, sheet1.max_column)
+print_sheet()
 
 workbook.save('new-' + filename)
 # workbook.save(filename)
