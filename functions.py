@@ -100,20 +100,20 @@ if sheet1.cell(row=1, column=1).value is None:
 else:
   main()
   print('mained')
-start = datetime.time(hour=5, minute=30)
-end = datetime.time(hour=9, minute=45)
-now = datetime.date.today()
-print('now: ', now)
-insert_hours(start, end, now)
+# start = datetime.time(hour=5, minute=30)
+# end = datetime.time(hour=9, minute=45)
+# now = datetime.date.today()
+# print('now: ', now)
+# insert_hours(start, end, now)
 
-start = datetime.time(hour=5, minute=30)
-end = datetime.time(hour=9, minute=45)
-now = datetime.date.today() + datetime.timedelta(days=2)
-print('now: ', now)
-insert_hours(start, end, now)
+# start = datetime.time(hour=5, minute=30)
+# end = datetime.time(hour=9, minute=45)
+# now = datetime.date.today() + datetime.timedelta(days=2)
+# print('now: ', now)
+# insert_hours(start, end, now)
 
-calc_hours(7)
-calc_hours(11)
+# calc_hours(7)
+# calc_hours(11)
 
 print_sheet()
 
