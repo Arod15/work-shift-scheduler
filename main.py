@@ -9,17 +9,19 @@ def log_hours():
 def date_parser():
   date = input('Date (MM/DD/YYYY): ')
   date_array = date.split('/')
+  cons_date = None
   try:
     cons_date = datetime.date(int(date_array[2]), int(date_array[0]), int(date_array[1]))
   except:
     print('Enter valid date')
-    date_parser()
+    return
+    # date_parser()
   return cons_date
 def time_parser():
-  start = input('Time End (HH/MM): ')
-  end = input('Time End (HH/MM): ')
-  start_arr = start.split('/')
-  end_arr = end.split('/')
+  start = input('Time End (HH:MM): ')
+  end = input('Time End (HH:MM): ')
+  start_arr = start.split(':')
+  end_arr = end.split(':')
   try:
     start = datetime.time(hour=int(start_arr[0]), minute=int(start_arr[1]))
     end = datetime.time(hour=int(end_arr[0]), minute=int(end_arr[1]))
