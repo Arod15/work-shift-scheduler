@@ -4,8 +4,8 @@ from openpyxl.styles import PatternFill
 
 days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-# filename = 'init.xlsx'
-filename = 'NEW-init.xlsx'
+filename = 'init.xlsx'
+# filename = 'new-init.xlsx'
 workbook = op.load_workbook(filename)
 sheet1 = workbook.active
 
@@ -20,8 +20,8 @@ def color_row(r):
   for i in range(1, sheet1.max_column+1):
     sheet1.cell(row=r, column=i).fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
 def insert_hours(start, end, date):
-  if date > datetime.date.today():
-      raise ValueError('Can\'t insert into a date that hasn\'t occured yet.')
+#   if date > datetime.date.today():
+#       raise ValueError('Can\'t insert into a date that hasn\'t occured yet.')
   i = 1
   j = 2
   while sheet1.cell(row=i, column=2).value != date:
@@ -68,46 +68,54 @@ def week(row):
     sheet1.cell(row=row+i, column=1).value = days[i]
 def dates(row, col):
   start_date = sheet1.cell(row=row, column=col).value
+  res = start_date
   for i in range(1, len(days)):
-    res = start_date + datetime.timedelta(days=1)
-    cons_start_date = datetime.date(res.year, res.month, res.day)
-    sheet1.cell(row=row+i, column=col).value = cons_start_date
-    start_date += datetime.timedelta(days=1)
-def init(r, c, start=None):
+    res += datetime.timedelta(days=1)
+    # cons_start_date = datetime.date(res.year, res.month, res.day)
+    sheet1.cell(row=row+i, column=col).value = res
+    # start_date += datetime.timedelta(days=1)
+def generate_one(r, c, start):
   sheet1.cell(row=r, column=1).value = 'Day'
   sheet1.cell(row=r, column=2).value = 'Date'
   shifts(r, 2)
   week(r+1)
-  if start is None:
-    sheet1.cell(row=r+1, column=2).value = datetime.date(2019, 5, 14)
-  else:
-    sheet1.cell(row=r+1, column=2).value = start
+  sheet1.cell(row=r+1, column=2).value = start
   dates(r+1, 2)
   color_row(r+8)
-def main():
-  i = 2
-  day_date = datetime.date.today()
-  while sheet1.cell(row=i, column=2).value is not None:
-    day_date = sheet1.cell(row=i, column=2).value
-    sheet1.cell(row=i, column=2).value = datetime.date(day_date.year, day_date.month, day_date.day)
-    i += 1
-  i += 1
-  start_date = day_date + datetime.timedelta(days=1)
-  new_day_date = datetime.date(start_date.year, start_date.month, start_date.day)
-  init(i, 1, start=new_day_date)
-
+# def main():
+#   i = 2
+#   day_date = datetime.date.today()
+#   while sheet1.cell(row=i, column=2).value is not None:
+#     day_date = sheet1.cell(row=i, column=2).value
+#     sheet1.cell(row=i, column=2).value = datetime.date(day_date.year, day_date.month, day_date.day)
+#     i += 1
+#   i += 1
+#   start_date = day_date + datetime.timedelta(days=1)
+#   new_day_date = datetime.date(start_date.year, start_date.month, start_date.day)
+#   init(i, 1, start=new_day_date)
+zero_time = datetime.time(hour=0, minute=0, second=0)
+print(zero_time)
+begin = datetime.date(2019, 5, 12)
+date = datetime.datetime.combine(begin, zero_time)
 
 if sheet1.cell(row=1, column=1).value is None:
-  init(1, 1)
-else:
-  main()
-  print('mained')
+    for x in range(20):
+        print(date)
+        generate_one(1 + 9*x, 1, date)
+        date += datetime.timedelta(days=7)
+# if sheet1.cell(row=1, column=1).value is None:
+#   generate_one(1, 1)
+# else:
+#   main()
+#   print('mained')
+
 
 start = datetime.time(hour=5, minute=30)
 end = datetime.time(hour=9, minute=45)
-now = datetime.date.today()
+now = datetime.date.today() - datetime.timedelta(days=3)
 print('now: ', now)
-insert_hours(start, end, now)
+time_now = datetime.datetime.combine(now, zero_time)
+insert_hours(start, end, time_now)
 
 # start = datetime.time(hour=5, minute=30)
 # end = datetime.time(hour=9, minute=45)
@@ -121,5 +129,5 @@ insert_hours(start, end, now)
 print_sheet()
 
 # workbook.save('new-' + filename)
-# workbook.save(filename)
+workbook.save(filename)
 workbook.close()
