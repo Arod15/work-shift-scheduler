@@ -4,37 +4,34 @@ from openpyxl.styles import PatternFill
 
 days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-# filename = 'init.xlsx'
-# # filename = 'new-init.xlsx'
-# workbook = op.load_workbook(filename)
-# sheet1 = workbook.active
-
 def print_sheet(sheet1):
     maxr = sheet1.max_row
     maxc = sheet1.max_column
+    print('----------------------')
     for i in range(1, maxr+1):
+        print('| ', end="")
         for j in range(1, maxc+1):
-            print(i, j, sheet1.cell(row=i, column=j).value)
-
+            if sheet1.cell(row=i, column=j).fill == PatternFill(bgColor="FFC7CE", fill_type = "solid"):
+                print('----------------------------------------------------------')
+                break
+            else:
+                print(sheet1.cell(row=i, column=j).value, end="")
+                print(' | ', end="")
+        print("")
 def color_row(r, sheet1):
   for i in range(1, sheet1.max_column+1):
     sheet1.cell(row=r, column=i).fill = PatternFill(bgColor="FFC7CE", fill_type = "solid")
 def insert_hours(start, end, date, sheet1):
-#   if date > datetime.date.today():
-#       raise ValueError('Can\'t insert into a date that hasn\'t occured yet.')
   i = 1
   j = 2
   while sheet1.cell(row=i, column=2).value != date:
-    # print(sheet1.cell(row=i, column=2).value, date)
     print(i, j, sheet1.cell(row=i, column=j).value, date)
     i += 1
   while sheet1.cell(row=i, column=j).value is not None:
     print(i, j, sheet1.cell(row=i, column=j).value)
     j += 1
   sheet1.cell(row=i, column=j).value = start
-  print(f"inserted {start} at ({i}, {j})")
   sheet1.cell(row=i, column=j+1).value = end
-  print(f"inserted {end} at ({i}, {j})")
 def sum_hours(r, sheet1):
   total = 0
   for i in range(1, 8):
@@ -71,9 +68,7 @@ def dates(row, col, sheet1):
   res = start_date
   for i in range(1, len(days)):
     res += datetime.timedelta(days=1)
-    # cons_start_date = datetime.date(res.year, res.month, res.day)
     sheet1.cell(row=row+i, column=col).value = res
-    # start_date += datetime.timedelta(days=1)
 def initialize(sheet1):
     if sheet1.cell(row=1, column=1).value is None:
         for x in range(4):
