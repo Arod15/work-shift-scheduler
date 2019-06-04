@@ -94,13 +94,11 @@ def generate_one(r, c, start):
 #   new_day_date = datetime.date(start_date.year, start_date.month, start_date.day)
 #   init(i, 1, start=new_day_date)
 zero_time = datetime.time(hour=0, minute=0, second=0)
-print(zero_time)
 begin = datetime.date(2019, 5, 12)
 date = datetime.datetime.combine(begin, zero_time)
 
 if sheet1.cell(row=1, column=1).value is None:
-    for x in range(20):
-        print(date)
+    for x in range(4):
         generate_one(1 + 9*x, 1, date)
         date += datetime.timedelta(days=7)
 # if sheet1.cell(row=1, column=1).value is None:
@@ -110,12 +108,12 @@ if sheet1.cell(row=1, column=1).value is None:
 #   print('mained')
 
 
-start = datetime.time(hour=5, minute=30)
-end = datetime.time(hour=9, minute=45)
-now = datetime.date.today() - datetime.timedelta(days=3)
-print('now: ', now)
-time_now = datetime.datetime.combine(now, zero_time)
-insert_hours(start, end, time_now)
+# start = datetime.time(hour=5, minute=30)
+# end = datetime.time(hour=9, minute=45)
+# now = datetime.date.today() - datetime.timedelta(days=3)
+# print('now: ', now)
+# time_now = datetime.datetime.combine(now, zero_time)
+# insert_hours(start, end, time_now)
 
 # start = datetime.time(hour=5, minute=30)
 # end = datetime.time(hour=9, minute=45)
@@ -126,8 +124,8 @@ insert_hours(start, end, time_now)
 # calc_hours(7)
 # calc_hours(11)
 
-print_sheet()
+# print_sheet()
 
-# workbook.save('new-' + filename)
-workbook.save(filename)
+workbook.save('new-' + filename)
+# workbook.save(filename)
 workbook.close()
