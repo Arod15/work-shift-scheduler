@@ -3,6 +3,11 @@ from functions import *
 
 zero_time = datetime.time(hour=0, minute=0, second=0)
 
+# filename = 'init.xlsx'
+filename = 'new-init.xlsx'
+workbook = op.load_workbook(filename)
+sheet1 = workbook.active
+
 def log_hours():
   date = date_parser()
   if date == False:
@@ -10,7 +15,7 @@ def log_hours():
   time = time_parser()
   if time == False:
     return False
-  insert_hours(time[0], time[1], date)
+  insert_hours(time[0], time[1], date, sheet1)
 
 def date_parser():
   date = input('Date (MM/DD/YYYY): ')
@@ -35,7 +40,12 @@ def time_parser():
     return False
   return (start, end)
 def main1():
+  initialize(sheet1)
   log_hours()
 
 main1()
-print_sheet()
+print_sheet(sheet1)
+
+# workbook.save('new-' + filename)
+workbook.save(filename)
+workbook.close()
