@@ -25,10 +25,8 @@ def insert_hours(start, end, date, sheet1):
   i = 1
   j = 2
   while sheet1.cell(row=i, column=2).value != date:
-    print(i, j, sheet1.cell(row=i, column=j).value, date)
     i += 1
   while sheet1.cell(row=i, column=j).value is not None:
-    print(i, j, sheet1.cell(row=i, column=j).value)
     j += 1
   sheet1.cell(row=i, column=j).value = start
   sheet1.cell(row=i, column=j+1).value = end
@@ -71,7 +69,7 @@ def dates(row, col, sheet1):
     sheet1.cell(row=row+i, column=col).value = res
 def initialize(sheet1):
     if sheet1.cell(row=1, column=1).value is None:
-        for x in range(4):
+        for x in range(20):
             generate_one(1 + 9*x, 1, date, sheet1)
             date += datetime.timedelta(days=7)
 def generate_one(r, c, start, sheet1):
@@ -87,25 +85,3 @@ zero_time = datetime.time(hour=0, minute=0, second=0)
 begin = datetime.date(2019, 5, 12)
 date = datetime.datetime.combine(begin, zero_time)
 
-
-# start = datetime.time(hour=5, minute=30)
-# end = datetime.time(hour=9, minute=45)
-# now = datetime.date.today() - datetime.timedelta(days=3)
-# print('now: ', now)
-# time_now = datetime.datetime.combine(now, zero_time)
-# insert_hours(start, end, time_now)
-
-# start = datetime.time(hour=5, minute=30)
-# end = datetime.time(hour=9, minute=45)
-# now = datetime.date.today() + datetime.timedelta(days=2)
-# print('now: ', now)
-# insert_hours(start, end, now)
-
-# calc_hours(7)
-# calc_hours(11)
-
-# print_sheet()
-
-# workbook.save('new-' + filename)
-# # workbook.save(filename)
-# workbook.close()
